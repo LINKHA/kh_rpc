@@ -4,14 +4,17 @@
 #include <memory>
 #include <unordered_map>
 
+//#include "io_service_pool.h"
 #include "connection.h"
+
+using boost::asio::ip::tcp;
 
 namespace KhRpc
 {
 enum class ExecMode { sync, async };
 const constexpr ExecMode Async = ExecMode::async;
 
-class router
+class router : asio::noncopyable
 {
 public:
     template<ExecMode model, typename Function>
@@ -76,6 +79,7 @@ private:
             std::placeholders::_4, std::placeholders::_5) 
         };
     }
+
     std::unordered_map<
         std::string,
 		std::function<void(
